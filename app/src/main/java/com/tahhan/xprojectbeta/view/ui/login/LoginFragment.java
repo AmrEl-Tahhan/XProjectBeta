@@ -85,7 +85,14 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Attempting to login");
-                login(mMail.getText().toString(),mPassword.getText().toString());
+                //check for null valued EditText fields
+                if (!isEmpty(mMail.getText().toString())
+                        && !isEmpty(mPassword.getText().toString())) {
+                    login(mMail.getText().toString(),mPassword.getText().toString());
+
+                } else {
+                    Toast.makeText(getActivity(), "You must fill out all the fields", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -96,6 +103,7 @@ public class LoginFragment extends Fragment {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment,REGISTER_FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
     }
     
@@ -120,4 +128,10 @@ public class LoginFragment extends Fragment {
                     }
                 });
     }
+
+    private boolean isEmpty(String string) {
+        return string.equals("");
+    }
+
+
 }
