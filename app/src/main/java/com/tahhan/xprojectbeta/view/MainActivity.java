@@ -1,23 +1,24 @@
 package com.tahhan.xprojectbeta.view;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.tahhan.xprojectbeta.R;
+import com.tahhan.xprojectbeta.TransporterRegFragment;
 import com.tahhan.xprojectbeta.view.ui.login.LoginFragment;
 import com.tahhan.xprojectbeta.view.ui.login.RegisterFragment;
 
 public class MainActivity extends AppCompatActivity {
     public static final String LOGIN_FRAGMENT_TAG = "loginFragmentTag";
     public static final String REGISTER_FRAGMENT_TAG = "register_fragment_tag";
+    public static final String TRANSPORTER_REG_FRAGMENT_TAG = "transporter_reg_fragment_tag";
     public static final String LOGIN_FRAGMENT_TRANSACTION_TAG = "loginFragmentTransactionTag";
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
     private FragmentManager fm;
+    private TransporterRegFragment tf;
 
 
     @Override
@@ -47,11 +48,17 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    @Override
     public void onBackPressed() {
         if (loginFragment.isVisible()) {
             finish();
         } else super.onBackPressed();
 
+      /*  TrasporterRegFragment transporterReg = new TrasporterRegFragment();
+
+        fm.beginTransaction().replace(R.id.fragment_container,transporterReg).commit();
+*/
     }
+
+
+
 }

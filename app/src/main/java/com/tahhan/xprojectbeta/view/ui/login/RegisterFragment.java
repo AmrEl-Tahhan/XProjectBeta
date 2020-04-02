@@ -1,6 +1,5 @@
 package com.tahhan.xprojectbeta.view.ui.login;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +17,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.tahhan.xprojectbeta.R;
+import com.tahhan.xprojectbeta.TransporterRegFragment;
+
+import java.util.Objects;
+
+import static com.tahhan.xprojectbeta.view.MainActivity.TRANSPORTER_REG_FRAGMENT_TAG;
 
 
 public class RegisterFragment extends Fragment {
@@ -29,6 +32,9 @@ public class RegisterFragment extends Fragment {
     EditText mailET;
     EditText passwordET;
     EditText passwordConfirmET;
+    Button btnlogface;
+    Button btnloggoogle;
+    private Button registerAsTransporter;
 
     @Nullable
     @Override
@@ -43,29 +49,31 @@ public class RegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Initialize Firebase Auth
         registerBtn = view.findViewById(R.id.signUpBtn);
+        btnlogface = view.findViewById(R.id.btnlogface);
+        btnloggoogle = view.findViewById(R.id.btnloggoogle);
         mailET = view.findViewById(R.id.EmailET);
         passwordET = view.findViewById(R.id.register_password);
         passwordConfirmET = view.findViewById(R.id.passwordConfirm);
+        registerAsTransporter = view.findViewById(R.id.signUpTransporterBtn);
         mAuth = FirebaseAuth.getInstance();
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: attempting to register.");
-                //check for null valued EditText fields
-                if (!isEmpty(mailET.getText().toString())
-                        && !isEmpty(passwordET.getText().toString())
-                        && !isEmpty(passwordConfirmET.getText().toString())) {
-                        //check if passwords match
-                        if (passwordET.getText().toString() .equals(passwordConfirmET.getText().toString()))  {
-                            //Initiate registration task
-                            register(mailET.getText().toString(), passwordET.getText().toString());
-                        } else {
-                            Toast.makeText(getActivity(), "Passwords do not Match", Toast.LENGTH_SHORT).show();
-                        }
 
+        registerAsTransporter.setOnClickListener(v -> loadRegAsTransporterFragment());
+        registerBtn.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: attempting to register.");
+            //check for null valued EditText fields
+            if (!isEmpty(mailET.getText().toString())
+                    && !isEmpty(passwordET.getText().toString())
+                    && !isEmpty(passwordConfirmET.getText().toString())) {
+                //check if passwords match
+                if (passwordET.getText().toString().equals(passwordConfirmET.getText().toString())) {
+                    //Initiate registration task
+                    register(mailET.getText().toString(), passwordET.getText().toString());
                 } else {
-                    Toast.makeText(getActivity(), "You must fill out all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Passwords do not Match", Toast.LENGTH_SHORT).show();
                 }
+
+            } else {
+                Toast.makeText(getActivity(), "You must fill out all the fields", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -89,13 +97,21 @@ public class RegisterFragment extends Fragment {
                         }
                     }
                 });
+
     }
 
-    private boolean isEmpty(String string) {
+    public static boolean isEmpty(String string) {
         return string.equals("");
     }
 
-
+    private void loadRegAsTransporterFragment() {
+        TransporterRegFragment tr = new TransporterRegFragment();
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, tr, TRANSPORTER_REG_FRAGMENT_TAG)
+                .addToBackStack(null)
+                .commit();
+    }
 
 
 }
