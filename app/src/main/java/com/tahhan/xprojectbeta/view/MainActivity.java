@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOGIN_FRAGMENT_TRANSACTION_TAG = "loginFragmentTransactionTag";
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
+    private TransporterRegFragment transporterRegFragment;
     private FragmentManager fm;
     private TransporterRegFragment tf;
 
@@ -27,15 +28,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fm = getSupportFragmentManager();
         loginFragment = (LoginFragment) fm.findFragmentByTag(LOGIN_FRAGMENT_TAG);
+        transporterRegFragment = (TransporterRegFragment) fm.findFragmentByTag(TRANSPORTER_REG_FRAGMENT_TAG);
         registerFragment = (RegisterFragment) fm.findFragmentByTag(REGISTER_FRAGMENT_TAG);
-        if (loginFragment == null && registerFragment == null) {
+        if (loginFragment == null
+                && registerFragment == null
+                && transporterRegFragment == null) {
             loadLoginFragment();
-        } else if (registerFragment == null) {
+        } else if (registerFragment == null
+                && transporterRegFragment == null) {
             fm.beginTransaction().replace(R.id.fragment_container,
                     loginFragment, LOGIN_FRAGMENT_TAG);
-        } else {
+        } else if (transporterRegFragment == null) {
             fm.beginTransaction().replace(R.id.fragment_container,
                     registerFragment, REGISTER_FRAGMENT_TAG);
+        } else if (registerFragment == null) {
+            fm.beginTransaction().replace(R.id.fragment_container,
+                    transporterRegFragment, TRANSPORTER_REG_FRAGMENT_TAG);
         }
     }
 
@@ -58,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().replace(R.id.fragment_container,transporterReg).commit();
 */
     }
-
 
 
 }
